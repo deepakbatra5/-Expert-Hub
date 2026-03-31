@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="midnight">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expert Hub</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-1" aria-hidden="true"></div>
+  <div class="ambient ambient-2" aria-hidden="true"></div>
+
+  <main class="app-shell">
+    <header class="topbar reveal">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div>
+          <h1>Expert Hub</h1>
+          <p>Smart guidance from role-based assistants</p>
+        </div>
+      </div>
+
+      <div class="controls">
+        <label for="role">Role</label>
+        <select id="role" aria-label="Select role">
+          <option value="doctor">Doctor</option>
+          <option value="lawyer">Lawyer</option>
+          <option value="engineer">Engineer</option>
+          <option value="teacher">Teacher</option>
+          <option value="student">Student</option>
+        </select>
+
+        <label for="themeSelect">Theme</label>
+        <select id="themeSelect" aria-label="Select theme">
+          <option value="midnight">Midnight</option>
+          <option value="ocean">Ocean</option>
+          <option value="sunrise">Sunrise</option>
+          <option value="forest">Forest</option>
+        </select>
+      </div>
+    </header>
+
+    <section class="chat-panel reveal">
+      <div id="chatBox" class="chat-box" aria-live="polite"></div>
+
+      <form id="chatForm" class="composer" autocomplete="off">
+        <input type="text" id="message" placeholder="Ask anything..." maxlength="600" required>
+        <button type="submit" id="sendBtn">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
