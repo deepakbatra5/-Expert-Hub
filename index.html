@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expert Hub</title>
+  <meta http-equiv="refresh" content="0; url=frontend/index.html">
+  <script>
+    (function () {
+      var path = window.location.pathname;
+      var parts = path.split("/").filter(Boolean);
+      var isGithubPages = window.location.hostname.endsWith("github.io");
+      var base = isGithubPages && parts.length > 0 ? "/" + parts[0] + "/" : "/";
+      var target = base + "frontend/index.html" + window.location.search + window.location.hash;
+      window.location.replace(target);
+    })();
+  </script>
+</head>
+<body>
+  <p>Redirecting to Expert Hub...</p>
+</body>
+</html>
