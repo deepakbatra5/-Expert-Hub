@@ -205,8 +205,8 @@ async function sendMessage(messageText) {
       addMessage("Backend API is not configured for GitHub Pages yet. Set window.EXPERT_HUB_API_URL in frontend/config.js.", "bot");
     } else {
       addMessage("Unable to connect to the assistant right now. Please try again.", "bot");
+      console.error(err);
     }
-    console.error(err);
   } finally {
     sendBtn.disabled = false;
     messageInput.focus();
