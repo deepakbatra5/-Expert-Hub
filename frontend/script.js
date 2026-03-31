@@ -6,12 +6,12 @@ const roleSelect = document.getElementById("role");
 const themeSelect = document.getElementById("themeSelect");
 
 const THEME_STORAGE_KEY = "expert-hub-theme";
-const RUNTIME_API_URL = (window.EXPERT_HUB_API_URL || "").trim();
+const RUNTIME_API_URL = (window.EXPERT_HUB_API_URL || "https://expert-hub.onrender.com/chat").trim();
 
 function resolveApiUrl() {
   const { protocol, hostname, port } = window.location;
 
-  if (RUNTIME_API_URL) {
+  if (RUNTIME_API_URL && RUNTIME_API_URL.startsWith("http")) {
     return RUNTIME_API_URL;
   }
 
@@ -20,7 +20,7 @@ function resolveApiUrl() {
   }
 
   if (hostname.endsWith("github.io")) {
-    return "";
+    return "https://expert-hub.onrender.com/chat";
   }
 
   if (port && port !== "3000") {
