@@ -6,7 +6,7 @@ const roleSelect = document.getElementById("role");
 const themeSelect = document.getElementById("themeSelect");
 
 const THEME_STORAGE_KEY = "expert-hub-theme";
-const RUNTIME_API_URL = (window.EXPERT_HUB_API_URL || "https://expert-hub.onrender.com/chat").trim();
+const RUNTIME_API_URL = (window.EXPERT_HUB_API_URL || "").trim();
 
 function resolveApiUrl() {
   const { protocol, hostname, port } = window.location;
@@ -19,9 +19,8 @@ function resolveApiUrl() {
     return "http://localhost:3000/chat";
   }
 
-  if (hostname.endsWith("github.io")) {
-    return "https://expert-hub.onrender.com/chat";
-  }
+  return "/chat";
+}
 
   if (port && port !== "3000") {
     return `http://${hostname}:3000/chat`;
