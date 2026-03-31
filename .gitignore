@@ -13,7 +13,7 @@ yarn-error.log*
 pnpm-debug.log*
 *.log
 
-# Build outputs and coverage
+# Build outputs and coverage and
 coverage/
 dist/
 build/
