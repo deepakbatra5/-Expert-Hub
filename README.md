@@ -1,99 +1,101 @@
-# Expert Hub - AI Role-Based Chat Application
+# Expert Hub
 
-A full-stack AI chat application with role-based interactions powered by OpenAI. Deployable on Render with frontend and backend on the same server.
+AI chat app with role-based assistants, deployed serverless on Vercel.
 
 ## Features
-- Multiple expert roles (Doctor, Lawyer, Engineer, Teacher, Student)
-- Dark/Light theme support (Midnight, Ocean, Sunrise, Forest)
-- ChatGPT-like markdown formatting for responses
-- Responsive UI/UX
-- GitHub Pages + GitHub Actions CI/CD
-- One-click Render deployment
 
-## Local Development
+- **Role-based chat**: Doctor, Lawyer, Engineer, Teacher, Student
+- **Themes**: Midnight, Ocean, Sunrise, Forest
+- **Markdown formatting**: Code blocks, lists, headings in responses
+- **Serverless deployment**: Fast, scalable, low cost
 
-1. Clone the repo:
-```bash
-git clone https://github.com/deepakbatra5/-Expert-Hub.git
-cd expert-hub
-```
+## Quick Start
 
-2. Create `.env`:
-```bash
-cp .env.example .env
-# Add your OpenAI API key
-```
+### Local Testing
 
-3. Install and run:
 ```bash
 npm install
-npm start
-# Open http://localhost:3000
+# Create .env from .env.example
+# Add your OPENAI_API_KEY
 ```
 
-## Deploy to Render
+To test the API function locally:
+```bash
+node api/chat.js
+```
 
-### Option 1: Using render.yaml (Recommended)
+### Deploy to Vercel
 
-1. Push your code to GitHub
-2. Go to [render.com](https://render.com) and sign in
-3. Click "New +" > "Web Service"
-4. Connect your GitHub repo
-5. Render will auto-detect `render.yaml` configuration
-6. Add environment variable:
-   - Key: `OPENAI_API_KEY`
-   - Value: Your OpenAI API key
-7. Click Deploy
+1. **Push to GitHub** (if not already):
+   ```bash
+   git add -A
+   git commit -m "Ready for Vercel"
+   git push
+   ```
 
-### Option 2: Manual Setup on Render
+2. **Link to Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Click "Add New Project"
+   - Select your GitHub repo
+   - Vercel auto-detects configuration from `vercel.json`
+   - Click "Deploy"
 
-1. Create new Web Service on Render
-2. Configure:
-   - Name: `expert-hub`
-   - Runtime: `Node`
-   - Start Command: `npm start`
-   - Add environment variable `OPENAI_API_KEY`
-3. Deploy
+3. **Set Environment Variable**:
+   - After deployment starts, go to Project Settings → Environment Variables
+   - Add: `OPENAI_API_KEY` = your OpenAI key
+   - Redeploy
 
-Your app will be live at `https://your-app-name.onrender.com`
-
-## Frontend on GitHub Pages (Optional)
-
-To also host frontend on GitHub Pages:
-
-1. Create GitHub secret `EXPERT_HUB_API_URL` with value: `https://your-render-domain.onrender.com/chat`
-2. GitHub Actions will auto-inject it during Pages deploy
+Your app is live! 🚀
 
 ## Project Structure
 
 ```
-expert-hub/
-├── backend/
-│   └── server.js (Express API + static file serving)
-├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── script.js
-├── package.json
-├── render.yaml (Render deployment config)
-└── .env.example
+.
+├── api/
+│   └── chat.js          # Serverless function (Vercel)
+├── public/
+│   ├── index.html       # Frontend UI
+│   ├── style.css        # Themes + styling
+│   └── script.js        # Chat logic
+├── vercel.json          # Vercel deployment config
+├── package.json         # Dependencies
+└── .env.example         # Environment template
 ```
 
-## Tech Stack
-- **Frontend**: HTML, CSS, JavaScript (Vanilla)
-- **Backend**: Node.js, Express.js
-- **AI**: OpenAI GPT-4 Mini
-- **Hosting**: Render (App), GitHub Pages (Optional UI mirror)
-- **CI/CD**: GitHub Actions
+## API Reference
+
+**POST** `/api/chat`
+
+Request:
+```javascript
+{
+  "message": "Explain quantum computing",
+  "role": "teacher"
+}
+```
+
+Response:
+```javascript
+{
+  "reply": "Quantum computing uses quantum bits..."
+}
+```
+
+**Roles**: `doctor` | `lawyer` | `engineer` | `teacher` | `student`
 
 ## Environment Variables
 
-Required:
-- `OPENAI_API_KEY` - Your OpenAI API key
+Set in Vercel dashboard (Project Settings → Environment Variables):
 
-Optional:
-- `PORT` - Default: 3000
-- `NODE_ENV` - Default: production
+- `OPENAI_API_KEY` (required) - Your OpenAI API key
+
+## Tech Stack
+
+- **Frontend**: HTML, CSS, JavaScript (Vanilla)
+- **Backend**: Node.js serverless function
+- **AI**: OpenAI GPT-4o-mini
+- **Hosting**: Vercel (zero-config deployment)
 
 ## License
+
 MIT

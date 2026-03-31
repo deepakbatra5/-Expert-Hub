@@ -1,23 +1,8 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
 import fetch from "node-fetch";
-import path from "path";
-import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 
 dotenv.config();
-const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const frontendDir = path.join(__dirname, "..", "frontend");
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static(frontendDir));
-
-const PORT = process.env.PORT || 3000;
-
-// Role-based system prompts
 const roles = {
   doctor: "You are a professional doctor. Give safe and general medical advice.",
   lawyer: "You are a legal expert. Provide legal insights clearly.",
@@ -27,12 +12,20 @@ const roles = {
   default: "You are a helpful AI assistant."
 };
 
-app.post("/chat", async (req, res) => {
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   const { message, role } = req.body;
+
+  if (!message) {
+    return res.status(400).json({ error: "Message is required" });
+  }
 
   if (!process.env.OPENAI_API_KEY) {
     return res.status(500).json({
-      error: "Missing OPENAI_API_KEY. Add it in your .env file and restart the server."
+      error: "Missing OPENAI_API_KEY environment variable"
     });
   }
 
@@ -54,21 +47,14 @@ app.post("/chat", async (req, res) => {
 
     const data = await response.json();
     const reply = data?.choices?.[0]?.message?.content;
+
     if (!reply) {
-      return res.status(500).json({ error: "No response returned from AI provider." });
+      return res.status(500).json({ error: "No response from AI provider" });
     }
 
-    res.json({ reply });
-
+    res.status(200).json({ reply });
   } catch (error) {
-    res.status(500).json({ error: "Something went wrong" });
+    console.error("Chat API error:", error);
+    res.status(500).json({ error: "Failed to process chat request" });
   }
-});
-
-app.get("/", (_req, res) => {
-  res.sendFile(path.join(frontendDir, "index.html"));
-});
-
-app.listen(PORT, () => {
-  console.log(`Expert Hub running on http://localhost:${PORT}`);
-});
+}

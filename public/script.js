@@ -9,17 +9,13 @@ const THEME_STORAGE_KEY = "expert-hub-theme";
 const RUNTIME_API_URL = (window.EXPERT_HUB_API_URL || "").trim();
 
 function resolveApiUrl() {
-  const { protocol, hostname, port } = window.location;
-
-  if (RUNTIME_API_URL && RUNTIME_API_URL.startsWith("http")) {
-    return RUNTIME_API_URL;
-  }
+  const { protocol, hostname } = window.location;
 
   if (protocol === "file:") {
-    return "http://localhost:3000/chat";
+    return "http://localhost:3000/api/chat";
   }
 
-  return "/chat";
+  return "/api/chat";
 }
 
 const CHAT_API_URL = resolveApiUrl();
