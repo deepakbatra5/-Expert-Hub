@@ -6,12 +6,21 @@ const roleSelect = document.getElementById("role");
 const themeSelect = document.getElementById("themeSelect");
 
 const THEME_STORAGE_KEY = "expert-hub-theme";
+const RUNTIME_API_URL = (window.EXPERT_HUB_API_URL || "").trim();
 
 function resolveApiUrl() {
   const { protocol, hostname, port } = window.location;
 
+  if (RUNTIME_API_URL) {
+    return RUNTIME_API_URL;
+  }
+
   if (protocol === "file:") {
     return "http://localhost:3000/chat";
+  }
+
+  if (hostname.endsWith("github.io")) {
+    return "";
   }
 
   if (port && port !== "3000") {
@@ -172,6 +181,10 @@ async function sendMessage(messageText) {
   const pending = addMessage("Thinking...", "bot", "loading");
 
   try {
+    if (!CHAT_API_URL) {
+      throw new Error("API_URL_NOT_CONFIGURED");
+    }
+
     const res = await fetch(CHAT_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -187,7 +200,12 @@ async function sendMessage(messageText) {
     addBotMessage(data.reply || "No response received.");
   } catch (err) {
     pending.remove();
-    addMessage("Unable to connect to the assistant right now. Please try again.", "bot");
+    const isApiMissing = err instanceof Error && err.message === "API_URL_NOT_CONFIGURED";
+    if (isApiMissing) {
+      addMessage("Backend API is not configured for GitHub Pages yet. Set window.EXPERT_HUB_API_URL in frontend/config.js.", "bot");
+    } else {
+      addMessage("Unable to connect to the assistant right now. Please try again.", "bot");
+    }
     console.error(err);
   } finally {
     sendBtn.disabled = false;
