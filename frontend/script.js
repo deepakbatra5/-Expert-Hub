@@ -22,13 +22,6 @@ function resolveApiUrl() {
   return "/chat";
 }
 
-  if (port && port !== "3000") {
-    return `http://${hostname}:3000/chat`;
-  }
-
-  return "/chat";
-}
-
 const CHAT_API_URL = resolveApiUrl();
 
 function escapeHtml(input) {
