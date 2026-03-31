@@ -31,12 +31,17 @@ jobs:
     name: Trigger Production Deploy
     needs: build
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.DEPLOY_HOOK_URL != ''
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:
       - name: Trigger deploy hook
         env:
           DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
         run: |
+          if [ -z "$DEPLOY_HOOK_URL" ]; then
+            echo "DEPLOY_HOOK_URL is not set. Skipping deploy hook."
+            exit 0
+          fi
+
           curl --fail --show-error --silent --request POST "$DEPLOY_HOOK_URL"
           echo "Deploy hook triggered successfully."
