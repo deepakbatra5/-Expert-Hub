@@ -180,11 +180,15 @@ async function sendMessage(messageText) {
 
   const pending = addMessage("Thinking...", "bot", "loading");
 
-  try {
-    if (!CHAT_API_URL) {
-      throw new Error("API_URL_NOT_CONFIGURED");
-    }
+  if (!CHAT_API_URL) {
+    pending.remove();
+    addBotMessage("### Backend Not Connected Yet\n\nYour frontend is live on GitHub Pages, but the backend API URL is not configured.\n\n1. Add the `EXPERT_HUB_API_URL` secret in GitHub Actions settings.\n2. Set it to your deployed backend endpoint, for example `https://your-backend-domain.com/chat`.\n3. Re-run the `Deploy Frontend to GitHub Pages` workflow.\n\nAfter that, chat will work normally.");
+    sendBtn.disabled = false;
+    messageInput.focus();
+    return;
+  }
 
+  try {
     const res = await fetch(CHAT_API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -200,13 +204,8 @@ async function sendMessage(messageText) {
     addBotMessage(data.reply || "No response received.");
   } catch (err) {
     pending.remove();
-    const isApiMissing = err instanceof Error && err.message === "API_URL_NOT_CONFIGURED";
-    if (isApiMissing) {
-      addMessage("Backend API is not configured for GitHub Pages yet. Set window.EXPERT_HUB_API_URL in frontend/config.js.", "bot");
-    } else {
-      addMessage("Unable to connect to the assistant right now. Please try again.", "bot");
-      console.error(err);
-    }
+    addMessage("Unable to connect to the assistant right now. Please try again.", "bot");
+    console.error(err);
   } finally {
     sendBtn.disabled = false;
     messageInput.focus();
